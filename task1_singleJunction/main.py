@@ -11,6 +11,15 @@ import datetime
 import os
 from TscEnv import TscEnv
 from torch.utils.tensorboard import SummaryWriter
+from config import Config
+
+'''
+特征里，每个方向上的排队长度要安排上
+出现了没有车通过，也一直亮着绿灯的情况。所以最大相位时长要做限制。最小的也有必要，虽然学习到了较长的相位，但还是有个别相位时间很短
+某个队列长度超过阈值，就终止回合，并做较大的处罚
+
+有的方向上车辆不多，就会一直等一直等。解决方法：各个方向上的排队最大时长要输入，并针对多次达到最大阈值，给与较大的处罚；或者奖励除了是等待车辆数的负数，也是等待时长的负数？两者的数量级要对等才行
+'''
 
 # 设备选择
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -19,11 +28,11 @@ writer = SummaryWriter(f'logs/tsc_{datetime.datetime.now().strftime("%y%m%d_%H%M
 gamma = 0.9  # 折扣因子
 epsilon = 1.0  # 初始探索率
 epsilon_min = 0.01  # 最低探索率
-epsilon_decay = 0.995  # 探索率衰减
+epsilon_decay = 0.97  # 探索率衰减
 learning_rate = 1e-3  # 学习率
-batch_size = 64  # 经验回放的批量大小
+batch_size = 128  # 经验回放的批量大小
 memory_size = 100000  # 经验池大小
-target_update_freq = 10  # 目标网络更新频率
+target_update_freq = 3  # 目标网络更新频率
 
 env = TscEnv(writer)
 n_state = env.observation_space.shape[0]  # 状态维度
@@ -92,7 +101,7 @@ def train():
 
 
 def save_checkpoint(id):
-    path=f"dqn_checkpoint_{id}.pth"
+    path=f"./checkpoints/dqn_checkpoint_{id}.pth"
     torch.save(model.state_dict(), path)
     print(f"Checkpoint saved to {path}")
 
@@ -110,8 +119,14 @@ def main(mode):
 
     if mode == "train":
         episodes = 1000
+
+        if input("preload model?[Y/n]") == "Y":
+            load_checkpoint('./checkpoints/dqn_checkpoint_-20657.283203125.pth')
+            epsilon = 0.1
+            print(f'preload successfully')
+
         for episode in range(episodes):
-            save_replay = True if episode > 200 and episode % 97 == 7 else False
+            save_replay = ( episode > 20 and episode % 37 == 7 )
             state = env.reset(save_replay=save_replay)
             state = state[0]  # 适配 Gym v26
             total_reward = 0
@@ -140,16 +155,34 @@ def main(mode):
                 target_model.load_state_dict(model.state_dict())
 
             # 定期保存模型
-            if episode % 100 == 99:
-                save_checkpoint(total_reward)
+            if episode % 50 == 49:
+                save_checkpoint(f'{episode}_{total_reward}')
 
             print(f"{datetime.datetime.now().strftime('%H:%M:%S')} Episode {episode}, Reward: {total_reward}, Epsilon: {epsilon:.3f}, loss:{loss}")
             writer.add_scalar('train/episode_reward', total_reward, episode)
             writer.add_scalar('train/epsilon', epsilon, episode)
             writer.add_scalar('train/loss', loss, episode)
+    else:
+        load_checkpoint('./checkpoints/dqn_checkpoint_-16595.48046875.pth')
+        model.eval()
+        eval_env = TscEnv(writer)
+
+        state = eval_env.reset(save_replay=True)
+        state = state[0]  # 适配 Gym v26
+
+        while True:
+            action = select_action(state, 0)
+            next_state, reward, terminated, truncated, _ = eval_env.step(action)
+            done = terminated or truncated
+            state = next_state
+                
+            if done:
+                break
+
+        
 
 if __name__ == "__main__":
-    main("train")
+    main("eval")
     
     
 

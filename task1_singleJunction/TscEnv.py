@@ -11,6 +11,7 @@ from torch.utils.tensorboard import SummaryWriter
 import math
 import cityflow
 from collections import deque
+from config import Config
 
 
 
@@ -29,8 +30,8 @@ class TscEnv(gym.Env):
         self.action_space = spaces.Discrete(4)
 
         self.observation_space = spaces.Box(
-            low= np.array([0,0,0,0,  0,  0,0,0,0,  0,0,0,0]),
-            high=np.array([1,1,1,1,  1,  1,1,1,1,  1,1,1,1]),
+            low= np.array([0,0,0,0,  0,  0,0,0,0,  0,0,0,0, 0,0,0,0]),
+            high=np.array([1,1,1,1,  1,  1,1,1,1,  1,1,1,1, 1,1,1,1]),
             dtype=np.float32
         )
         
@@ -47,8 +48,8 @@ class TscEnv(gym.Env):
 
     def reset(self, seed=None, save_replay=False):
         """重置环境到初始状态"""
-        self.eng.set_save_replay(save_replay)
-        self.eng.set_replay_file(f'replay_{datetime.datetime.now().strftime("%y%m%d_%H%M%S")}.txt')
+        #self.eng.set_save_replay(save_replay)
+        #self.eng.set_replay_file(f'replay_{datetime.datetime.now().strftime("%y%m%d_%H%M%S")}.txt')
         self.eng.reset()
 
         self.current_step = 0
@@ -60,6 +61,8 @@ class TscEnv(gym.Env):
             self.writer.add_scalar('phase_duration/avg', np.mean(self.durations), self.total_step)
             self.writer.add_scalar('phase_duration/std', np.std(self.durations), self.total_step)
         self.durations.clear()
+
+        self.long_q_duration = 0 #出现超过30两等待车的累计时间
         
         # 获取初始状态
         state = self._get_state()
@@ -99,7 +102,7 @@ class TscEnv(gym.Env):
 
         # 计算奖励
         reward, terminated = self._compute_reward()
-        if self.total_step % 9997 == 7:
+        if self.total_step % 997 == 7:
             self.writer.add_scalar('train/step_reward', reward, self.total_step)
 
         # 检查是否超过最大步数
@@ -127,18 +130,14 @@ class TscEnv(gym.Env):
             return 3
         assert False, f"invalid route {route} "
 
-
-    def _get_state(self):
+    def calc_vehicle_info(self):
         
 
-        PHASE_NUM = 4
-        OBSERV_CELL_NUM = 6
-        CELL_LEN = 5
+        self.vehicle_dense = np.zeros(Config.PHASE_NUM, dtype=np.float32) #停止线前面30m范围内的车辆密度
+        self.avg_speed = np.zeros(Config.PHASE_NUM, dtype=np.float32)#停止线前面30m范围内的车辆平均速度
+        self.waiting_qlen = np.zeros(Config.PHASE_NUM, dtype=np.float32) # 入口车道上排队的车辆数目，由于每个方向都是一个入口车道，所以这里就是等待队列的长度
 
-        vehicle_dense = np.zeros(PHASE_NUM, dtype=np.float32)
-        avg_speed = np.zeros(PHASE_NUM, dtype=np.float32)
-
-        speed_list = [deque(maxlen=100) for _ in range(PHASE_NUM)]
+        speed_list = [deque(maxlen=100) for _ in range(Config.PHASE_NUM)]
         vehicle_ids = self.eng.get_vehicles(True)
         for vid in vehicle_ids:
             try:
@@ -150,28 +149,38 @@ class TscEnv(gym.Env):
                     continue
                 
 
-                speed = info['speed']
-                distance = info['distance']             
+                speed = info['speed']       
                 route = info['route']
+                phase_id = self._route2phaseID(route)
+
+                if float(speed) < 0.1:
+                    self.waiting_qlen[phase_id] += 1
+
                 drivable = info['drivable']
                 vehicle_distance = info["distance"]  # 已行驶距离
                 to_stop_line = 300 - float(vehicle_distance)
-                if to_stop_line > (CELL_LEN *OBSERV_CELL_NUM) or to_stop_line < 0:
+                if to_stop_line > (Config.CELL_LEN *Config.OBSERV_CELL_NUM) or to_stop_line < 0:
                     continue
 
-                phase_id = self._route2phaseID(route)
-                vehicle_dense[phase_id] += 1.0 / (OBSERV_CELL_NUM * 2) 
+                
+                self.vehicle_dense[phase_id] += 1.0 / (Config.OBSERV_CELL_NUM * 2) 
                 speed_list[phase_id].append( float(speed) )
 
             except Exception as e:
                 print(f"Error retrieving info for vehicle {vid}: {e}")
         
-        for i in range(PHASE_NUM):
+        for i in range(Config.PHASE_NUM):
             if len(speed_list[i]) > 0:
-                avg_speed[i] = sum(speed_list[i]) / len(speed_list[i])
+                self.avg_speed[i] = sum(speed_list[i]) / len(speed_list[i])
+
+
+    def _get_state(self):
+        
+
+        self.calc_vehicle_info()
 
         # 当前相位的one-hot表示
-        phase_onehot = np.zeros(PHASE_NUM, dtype=np.long)
+        phase_onehot = np.zeros(Config.PHASE_NUM, dtype=np.long)
         phase_onehot[self.current_phase-1] = 1
                
 
@@ -180,8 +189,9 @@ class TscEnv(gym.Env):
             [
             phase_onehot,
             [self.phase_duration / 30],
-            vehicle_dense, 
-            avg_speed / 22,
+            self.vehicle_dense, 
+            self.avg_speed / 22,
+            self.waiting_qlen / Config.MAX_QLEN,
      
             ], 
             dtype=np.float32)
@@ -191,29 +201,30 @@ class TscEnv(gym.Env):
 
     def _compute_reward(self):
         # 简单实现：路口入口车道上等待的车辆数量和的负值。鼓励不要在路口堆积车辆
-        vehicle_ids = self.eng.get_vehicles(True)
-        vehicle_cnt = 0
-        for vid in vehicle_ids:
-            try:
-                info = self.eng.get_vehicle_info(vid)
-                if info.get('running', "0") != "1":
-                    continue
 
-                if info.get('intersection', "") != 'intersection_1_1':
-                    continue
-                
-                speed = info['speed']
-                speed = float(speed)
-                if speed > 0.1:
-                    continue
-                vehicle_cnt += 1
+        # 某些方向的等待车辆堆积超过阈值,
+        if np.any(self.waiting_qlen >= Config.MAX_QLEN):
+            self.long_q_duration += 1
+        else:
+            self.long_q_duration = 0
 
-            except Exception as e:
-                print(f"Error retrieving info for vehicle {vid}: {e}")
+        if self.long_q_duration > 20:
+            #print(f'too long queue')
+            return -10, False
+        
+        # 某个相位持续时间超过 30s
+        if self.phase_duration >= Config.MAX_PHASE_DUR:  
+            #print(f'too long phase')
+            return -10, False
+        
+
+        vehicle_cnt = np.sum(self.waiting_qlen)
 
         terminated = False
-        reward = -(vehicle_cnt**0.25)
-
+        if self.phase_duration == 1: #刚经历了切换，有3s红灯时间成本，所以-1处罚
+            reward = -(vehicle_cnt**0.25) - 1
+        else:
+            reward = -(vehicle_cnt**0.25)
 
         return reward, terminated
 
