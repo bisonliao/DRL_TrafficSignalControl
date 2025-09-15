@@ -24,13 +24,15 @@ However, most gradient-based reinforcement learning algorithms are mainly focusi
 
 ![image-20250914192216345](img/image-20250914192216345.png)
 
-以往的TSC DRL方法，缺乏应对不同交叉路口的统一神经网络设计，每面临一个新的交叉路口，都需要从0开始训练agent。而最近提出的FRAP网络架构，使得对不同的交叉路口使用统一的神经网络设计成为可能。
+以往的TSC DRL方法，缺乏应对不同交叉路口的统一神经网络设计，每面临一个新的交叉路口，都需要从0开始训练agent。而FRAP网络架构，使得对不同的交叉路口使用统一的神经网络设计成为可能。
 
 而我们的方法，MetaLight ，就是把改进的FRAP和扩展的meta-learning结合在一起，实现了不同路口场景下的知识迁移，从而快速的适配新场景。
 
 ### 3、Problem Statement
 
 ### 4、The MetaLight Framework
+
+[代码在这里](https://github.com/zxsRambo/metalight)
 
 #### 4.1 FRAP++
 
@@ -83,3 +85,20 @@ However, most gradient-based reinforcement learning algorithms are mainly focusi
 
 1. 把meta learning应用到多个交叉路口的TSC中
 2. 尝试解释黑盒的meta learning，搞清楚哪些知识被迁移了
+
+### 7、我的疑问
+
+Q：论文前半部分讲的是要用meta-learning /FRAP++实现知识迁移，从而提高训练的效率，例如基于已经训练好的一个模型在一个新的路口可以很少的样本就训练出对应的agent。 实验部分，为什么只是呈现最后训练的agent可以有更低的路口通行时间，却不是呈现模型收敛速度呢？
+
+A：在 MetaLight 的实验里，作者其实是通过 5、6、7 三组「travel time 随训练时长变化」的曲线来隐式地展现 sample efficiency（也就是收敛速度）的──只不过在最终的表格里，他们只列出了每个方法在训练结束时的平均通行时间，以便一眼对比收敛后质量的绝对差距。
+
+1．曲线里其实有「速度」信息
+
+- 图 5/6/7 横轴就是「simulation seconds」（也可以看成和样本数量成正比的训练步数），纵轴是实时的 average travel time。
+- 你可以直接从曲线斜率、以及它们达到某个阈值（比如 200 s）所用的横坐标，去量化「MetaLight 到 200 s 只要 500 s，Random 要 2000 s」之类的收敛速度对比。
+
+2．为什么表里没专门给收敛速度数字？
+
+- 篇幅所限＋真实系统中「最终通行时间」往往比「几步到某个精度」更直观。
+- RL 曲线本身波动比较大，直接对比「XXX 秒到达 90% 最终性能」要做更多的统计（比如多 seed 下的均值和方差），会占很大篇幅。
+- 作者选择把重点放在「同样的训练预算下，MetaLight 能收敛到更低的通行时间」这一核心结论，并用曲线示例来直观证明“它跑得又快又稳、比随机初始化更少样本就能达到同等或更好效果”。
