@@ -47,3 +47,13 @@ year: 2022
 还是一个传统的TSC方法：
 
 ![image-20250916130417008](img/image-20250916130417008.png)
+
+#### 4.2 Advanced Traffic State
+
+提出了一种改进的状态表示法，除了当前相位、每个相位的压力，还加上了每个相位的移动中的车辆的信息
+
+#### 4.3 Advanced-XLight 
+
+![image-20250916181856877](img/image-20250916181856877.png)
+
+### 5 、Experiments
