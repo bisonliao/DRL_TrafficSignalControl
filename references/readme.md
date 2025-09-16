@@ -37,6 +37,8 @@
 |      |        |      | SOTL                                                         |      |                                                              |                                            |
 |      |        |      | Max-pressure                                                 |      |                                                              |                                            |
 |      |        |      | FRAP                                                         |      |                                                              |                                            |
+|      |        |      | MPLight                                                      |      |                                                              |                                            |
+|      |        |      | CoLight                                                      |      |                                                              |                                            |
 
 来源：“https://dblp.uni-trier.de/search/publ/api?q=traffic signal control&h=1000&format=json”
 
