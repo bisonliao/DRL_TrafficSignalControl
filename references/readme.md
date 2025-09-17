@@ -14,7 +14,7 @@
 | 8    | ICAPS  | 2020 | Guidelines for Action Space Definition in Reinforcement Learning-Based Traffic Signal Control Systems | ?    |                                                              |                                            |
 | 9    | NeurPS | 2024 | DiffLight: A Partial Rewards Conditioned Diffusion Model for Traffic Signal Control with Missing Data | 8    |                                                              |                                            |
 | 10   | NeurPS | 2020 | **AttendLight: Universal Attention-Based Reinforcement Learning Model for Traffic Signal Control.** | 127  | 使用加性注意力机制和LSTM实现统一的agent来应对不同的多个路口  | 泛化能力和通用性好，单个路口性能也表现突出 |
-| 11   | ICML   | 2022 | Expression might be enough: representing pressure and demand for reinforcement learning based traffic signal control | 72   |                                                              |                                            |
+| 11   | ICML   | 2022 | Expression might be enough: representing pressure and demand for reinforcement learning based traffic signal control | 72   | 将pressure与“有效通行车辆数”构成状态表示，并应用到已有的MPLight 和CoLight方法上，对MaxPressure方法修改得到三个方法，都取得了更好的性能 | 修改简单，性能收益不错                     |
 | 12   | IJCAI  | 2024 | X-Light: Cross-City Traffic Signal Control Using Transformer on Transformer as Meta Multi-Agent Reinforcement Learner. | 16   |                                                              |                                            |
 | 13   | IJCAI  | 2023 | DenseLight: Efficient Control for Large-scale Traffic Signals with Dense Feedback | 17   |                                                              |                                            |
 | 14   | IJCAI  | 2023 | GPLight: Grouped Multi-agent Reinforcement Learning for Large-scale Traffic Signal Control | 40   |                                                              |                                            |
@@ -38,7 +38,7 @@
 |      |        |      | Max-pressure                                                 |      |                                                              |                                            |
 |      |        |      | FRAP                                                         |      |                                                              |                                            |
 |      |        |      | MPLight                                                      |      |                                                              |                                            |
-|      |        |      | CoLight                                                      |      |                                                              |                                            |
+|      | CIKM   | 2019 | CoLight: Learning Network-level Cooperation for Traffic Signal Control |      |                                                              |                                            |
 
 来源：“https://dblp.uni-trier.de/search/publ/api?q=traffic signal control&h=1000&format=json”
 
