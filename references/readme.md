@@ -34,9 +34,9 @@
 | 28   | AAMAS  | 2020 | **Learning an Interpretable Traffic Signal Control Policy**  | 82   | 在DQN训练的同时，训练一个多项式函数来拟合Q网络。因为多项式函数具备可解释可调节的属性 | 让agent的行为具备可解释可手动调节性        |
 | 29   | AAMAS  | 2020 | Feudal Multi-Agent Deep Reinforcement Learning for Traffic Signal Control | 99   | FMA2C把整个交通网络分割成多个区域，每个区域一个Manager 和 多个Worker，每个worker管理一个信号灯。 | 更好的全局协调能力，各项指标超过MA2C       |
 |      |        |      |                                                              |      |                                                              |                                            |
-|      |        | 2013 | Self-Organizing_Traffic_Lights_A_Realistic_Simulat（SOTL）   |      |                                                              |                                            |
-|      |        | 2013 | Max pressure control of a network of signalized intersections（MP） |      |                                                              |                                            |
-|      |        | 2019 | Learning Phase Competition for Traffic Signal Control（FRAP） |      |                                                              |                                            |
+|      |        | 2013 | Self-Organizing_Traffic_Lights_A_Realistic_Simulate（SOTL）  | 387  |                                                              |                                            |
+|      |        | 2013 | Max pressure control of a network of signalized intersections（MP） | 692  |                                                              |                                            |
+|      |        | 2019 | Learning Phase Competition for Traffic Signal Control（FRAP） | 292  | 针对TSC问题的巨大状态空间且探索不足 以及每个路口都要训练的问题，巧妙的设计了FRAP网络，对翻转和旋转的状态不变，对不同路口通用。 | 更快收敛，更充分的探索，对不同路口通用     |
 |      |        | 2019 | CoLight: Learning Network-level Cooperation for Traffic Signal Control |      |                                                              |                                            |
 
 来源：“https://dblp.uni-trier.de/search/publ/api?q=traffic signal control&h=1000&format=json”
