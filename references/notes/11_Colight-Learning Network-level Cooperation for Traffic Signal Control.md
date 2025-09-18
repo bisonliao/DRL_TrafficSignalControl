@@ -183,3 +183,7 @@ class CoLightNet(nn.Module):
 
 1. 邻居范围的确定更灵活
 2. 输入特征更丰富。当前只用了各个路口的（当前相位、每个车道上的车辆数）
+
+### 8、源代码
+
+[这里](https://github.com/wingsweihua/colight)
