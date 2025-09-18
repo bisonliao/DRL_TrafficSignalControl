@@ -36,8 +36,8 @@
 |      |        |      |                                                              |      |                                                              |                                            |
 |      |        | 2013 | Self-Organizing_Traffic_Lights_A_Realistic_Simulate（SOTL）  | 387  |                                                              |                                            |
 |      |        | 2013 | Max pressure control of a network of signalized intersections（MP） | 692  |                                                              |                                            |
-|      |        | 2019 | Learning Phase Competition for Traffic Signal Control（FRAP） | 292  | 针对TSC问题的巨大状态空间且探索不足 以及每个路口都要训练的问题，巧妙的设计了FRAP网络，对翻转和旋转的状态不变，对不同路口通用。 | 更快收敛，更充分的探索，对不同路口通用     |
-|      |        | 2019 | CoLight: Learning Network-level Cooperation for Traffic Signal Control |      |                                                              |                                            |
+|      | CIKM   | 2019 | **Learning Phase Competition for Traffic Signal Control（FRAP）** | 292  | 针对TSC问题的巨大状态空间且探索不足 以及每个路口都要训练的问题，巧妙的设计了FRAP网络，对翻转和旋转的状态不变，对不同路口通用。 | 更快收敛，更充分的探索，对不同路口通用     |
+|      | CIKM   | 2019 | **CoLight: Learning Network-level Cooperation for Traffic Signal Control** | 480  | 使用图注意力机制，协同相邻的信号灯                           | 更好的协同效果                             |
 
 来源：“https://dblp.uni-trier.de/search/publ/api?q=traffic signal control&h=1000&format=json”
 
