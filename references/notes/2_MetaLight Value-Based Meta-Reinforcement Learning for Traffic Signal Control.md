@@ -32,7 +32,7 @@ However, most gradient-based reinforcement learning algorithms are mainly focusi
 
 ### 4、The MetaLight Framework
 
-[代码在这里](https://github.com/zxsRambo/metalight)
+
 
 #### 4.1 FRAP++
 
@@ -102,3 +102,7 @@ A：在 MetaLight 的实验里，作者其实是通过 5、6、7 三组「travel
 - 篇幅所限＋真实系统中「最终通行时间」往往比「几步到某个精度」更直观。
 - RL 曲线本身波动比较大，直接对比「XXX 秒到达 90% 最终性能」要做更多的统计（比如多 seed 下的均值和方差），会占很大篇幅。
 - 作者选择把重点放在「同样的训练预算下，MetaLight 能收敛到更低的通行时间」这一核心结论，并用曲线示例来直观证明“它跑得又快又稳、比随机初始化更少样本就能达到同等或更好效果”。
+
+### 8、开放代码
+
+[代码在这里](https://github.com/zxsRambo/metalight)

@@ -29,7 +29,7 @@ RL解决TSC问题的时候，面临两个挑战：
 
 ### 4、Method
 
-[这里有开放代码](https://github.com/zhuliwen/RoadnetSZ/tree/main/code/HiLight)
+
 
 只要扯到HRL，就会挺复杂的：
 
@@ -72,3 +72,7 @@ The throughput is the number of vehicles which have finished their routes over t
 The controller minimizes local travel time and neighborhood travel time jointly with adaptive weighting by selecting among the sub-policies that optimize short-term targets. 
 
 Cooperation among agents is encouraged by the optimization of neighboring travel time.
+
+### 7、开放代码
+
+[这里有开放代码](https://github.com/zhuliwen/RoadnetSZ/tree/main/code/HiLight)
