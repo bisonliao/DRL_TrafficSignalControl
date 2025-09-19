@@ -17,7 +17,7 @@
 | 11   | ICML   | 2022 | **Expression might be enough: representing pressure and demand for reinforcement learning based traffic signal control** | 72   | 将pressure与“有效通行车辆数”构成状态表示，并应用到已有的MPLight 和CoLight方法上，对MaxPressure方法修改得到三个方法，都取得了更好的性能 | 修改简单，性能收益不错                                       |
 | 12   | IJCAI  | 2024 | X-Light: Cross-City Traffic Signal Control Using Transformer on Transformer as Meta Multi-Agent Reinforcement Learner. | 16   |                                                              |                                                              |
 | 13   | IJCAI  | 2023 | DenseLight: Efficient Control for Large-scale Traffic Signals with Dense Feedback | 17   |                                                              |                                                              |
-| 14   | IJCAI  | 2023 | GPLight: Grouped Multi-agent Reinforcement Learning for Large-scale Traffic Signal Control | 40   |                                                              |                                                              |
+| 14   | IJCAI  | 2023 | GPLight: Grouped Multi-agent Reinforcement Learning for Large-scale Traffic Signal Control | 40   | GCN对每个路口进行Embedding； Group Cohesion根据路口的embedding向量做聚类 ；改进型QMIX网络进行动作训练和预测 |                                                              |
 | 15   | IJCAI  | 2023 | Reinforcement Learning Approaches for Traffic Signal Control under Missing Data | 22   |                                                              |                                                              |
 | 16   | IJCAI  | 2023 | InitLight: Initial Model Generation for Traffic Signal Control Using Adversarial Inverse Reinforcement Learning | 11   |                                                              |                                                              |
 | 16   | IJCAI  | 2022 | Multi-Agent Reinforcement Learning for Traffic Signal Control through Universal Communication Method | 42   | 使用自注意力机制提取相邻路口间的影响信息，抽象为通用的UniComm网络架构，并基于此实现了多路口的UniLight方法。 | UniComm值得借鉴，但损失函数有点耦合。UniLight信息拆解部分偏复杂 |
@@ -40,6 +40,7 @@
 |      | CIKM   | 2019 | **CoLight: Learning Network-level Cooperation for Traffic Signal Control** | 480  | 使用图注意力机制，协同相邻的信号灯                           | 更好的协同效果                                               |
 |      |        | 2018 | IntelliLight                                                 |      |                                                              |                                                              |
 |      |        | 2019 | PressLight                                                   |      |                                                              |                                                              |
+|      | ICML   | 2018 | Qmix: Monotonic value functionfactorisation for deep multi-agent reinforcement learning | 3416 |                                                              |                                                              |
 
 来源：“https://dblp.uni-trier.de/search/publ/api?q=traffic signal control&h=1000&format=json”
 
