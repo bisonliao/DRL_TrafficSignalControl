@@ -40,7 +40,6 @@
 |      | CIKM   | 2019 | **CoLight: Learning Network-level Cooperation for Traffic Signal Control** | 480  | 使用图注意力机制，协同相邻的信号灯                           | 更好的协同效果                                               |
 |      |        | 2018 | IntelliLight                                                 |      |                                                              |                                                              |
 |      |        | 2019 | PressLight                                                   |      |                                                              |                                                              |
-|      | ICML   | 2018 | Qmix: Monotonic value functionfactorisation for deep multi-agent reinforcement learning | 3416 |                                                              |                                                              |
 
 来源：“https://dblp.uni-trier.de/search/publ/api?q=traffic signal control&h=1000&format=json”
 
