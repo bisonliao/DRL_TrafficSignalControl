@@ -38,8 +38,8 @@
 |      |        | 2013 | Max pressure control of a network of signalized intersections（MP） | 692  | 看似简单，实则有点麻烦                                       |                                                              |
 |      | CIKM   | 2019 | **Learning Phase Competition for Traffic Signal Control（FRAP）** | 292  | 针对TSC问题的巨大状态空间且探索不足 以及每个路口都要训练的问题，巧妙的设计了FRAP网络，对翻转和旋转的状态不变，对不同路口通用。 | 更快收敛，更充分的探索，对不同路口通用                       |
 |      | CIKM   | 2019 | **CoLight: Learning Network-level Cooperation for Traffic Signal Control** | 480  | 使用图注意力机制，协同相邻的信号灯                           | 更好的协同效果                                               |
-|      |        | 2018 | IntelliLight                                                 |      |                                                              |                                                              |
-|      |        | 2019 | PressLight                                                   |      |                                                              |                                                              |
+|      | KDD    | 2018 | IntelliLight：a Reinforcement Learning Approach for Intelligent Traffic Signal Control | 764  | 引入了 Phase Gate 和 Memory Palace 两个机制，分别解决了“相位敏感性不足”和“样本不均衡”问题。 |                                                              |
+|      | KDD    | 2019 | Presslight: Learning max pressure control to coordinate traffic signals in arterial network | 475  |                                                              |                                                              |
 
 来源：“https://dblp.uni-trier.de/search/publ/api?q=traffic signal control&h=1000&format=json”
 
