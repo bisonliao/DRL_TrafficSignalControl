@@ -41,6 +41,8 @@ venue：CIKM
 
 ![image-20250918092137880](img/image-20250918092137880.png)
 
+![image-20250921095114142](img/image-20250921095114142.png)
+
 #### 4.3 Q-value Prediction
 
 就是DQN，虽然损失函数公式看起来不是，经AI澄清就是DQN

@@ -91,4 +91,4 @@ ATT多次出现，我尝试找到ATT的精确定义和原始出处：
 
 This paper proposes a novel method called Advanced-MP, based on MP and SOTL, and designs an advanced traffic state (ATS) for the traffic movement representation with a pressure of queuing and demand of running for vehicles.
 
-In the future, we will analyze more traffic factors and pro vide a more precise traffic state representation to further optimize the TSC methods.
+In the future, we will analyze more traffic factors and provide a more precise traffic state representation to further optimize the TSC methods.
