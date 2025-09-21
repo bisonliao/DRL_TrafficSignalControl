@@ -9,7 +9,7 @@
    2. 有使用Pressure来协同路口的，例如PressLight / MPLight / ExpressMightBeEnough。Pressure考虑了下游的车辆数，是相邻路口之间的重要关系
    3. 注意力机制，例如 AttendLight / UniComm / CoLight，注意力机制天然有路口间相互影响力学习能力。
 2. 如何高效训练 / 支持更大规模 / 抽象统一方案
-   1. Meta Learning：MetaLight，除了迁移学习，它也使用了FRAP来适配不同拓扑的路口
+   1. Meta Learning：MetaLight，除了迁移学习，它也使用了FRAP来适配不同拓扑的路口；Pi-Light有很好的可解释性和泛化能力
    2. 更好的网络架构：FRAP，它对翻转和旋转的状态不变，对不同拓扑的路口通用，只需要较少的训练数据；MPLight也使用FRAP，并结合了Pressure机制
    3. 聚类成比较少的场景：GPLight，它使用GCN提取每个路口的嵌入向量并聚类，对这些类别的agent使用QMIX网络优化整体目标
 
@@ -18,7 +18,7 @@
 还有一些论文是其他方面的改进：
 
 1. 消除Sim2Real的鸿沟
-2. 可解释性：【28】通过训练一个多项式来拟合DQN里的DNN，实现可解释和可调节
+2. 可解释性：【28】通过训练一个多项式来拟合DQN里的DNN，实现可解释和可调节；Pi-Light使用自定义的编程语言加强可解释性
 3. 提升模型性能： 
    1. ExpressMightBeEnough通过改进状态表示提升性能；
    2. IntelliLight通过引入PhaseGate和Memory Palace提升；
@@ -32,6 +32,7 @@
 4. GreenWave是什么机制，可否结合到RL中
 5. 工程效率的课题：大规模交通网络下，交通灯巨多，怎么更高效的组织数据，避免一个一个交通灯手工写代码做特征工程；怎么大量的收集实际数据？与地图app结合？
 6. 与地图app/地图有什么可以结合的？用来采集模拟数据？ 更多的训练用特征（例如碧海片区是睡城/粤海街道是工作区）？
+7. 交叉一下：例如用进化算法来学习出一个可解释的多项式，已经有论文使用MCTS来优化一段出简单的程序了
 
 
 
@@ -42,7 +43,7 @@
 | ID   | venue  | year | title                                                        | cite | 一句话描述                                                   | 侧重的问题                                 |
 | ---- | ------ | ---- | ------------------------------------------------------------ | ---- | ------------------------------------------------------------ | ------------------------------------------ |
 | 1    | AAAI   | 2024 | Prompt to Transfer: Sim-to-Real Transfer for Traffic Signal Control with Prompt Learning | 47   | 利用LLM引入知识向量输入到GAT旁路中，补充特征输入，更好的解决Sim2Real的鸿沟问题。我认为GAT作用有限，因为模拟器底层可能不支持。 | Sim2Real                                   |
-| 2    | AAAI   | 2024 | π-Light: Programmatic Interpretable Reinforcement Learning for Resource-Limited Traffic Signal Control | 17   |                                                              |                                            |
+| 2    | AAAI   | 2024 | π-Light: Programmatic Interpretable Reinforcement Learning for Resource-Limited Traffic Signal Control | 17   | 定义一种由条件语句/赋值语句构成的程序来描述策略，使用MCTS找到最优的程序。解决了三个挑战：可解释性、泛化能力、低性能硬件下可部署 | 可解释性，泛化能力，低硬件开销             |
 | 3    | AAAI   | 2023 | SafeLight: A Reinforcement Learning Method toward Collision-free Traffic Signal Control | 54   | 作者希望训练RL不做出导致危险的动作，但实际上只需要不到100行代码加上三条人工规则即可。是一篇回字有几种写法的论文，而且论文里引用的事故数据也归因错误，事故出现在交叉路口不表示是信号灯导致的。所以我不认同这个论文。 | 安全问题                                   |
 | 4    | AAAI   | 2021 | Hierarchically and Cooperatively Learning Traffic Signal Control | 89   | 使用HRL解决目标不一致和协同问题。HRL总是很复杂不好复现。     | 多路口协同                                 |
 | 5    | AAAI   | 2020 | **Toward A Thousand Lights: Decentralized Deep Reinforcement Learning for Large-Scale Traffic Signal Control** | 489  | 输入车道的压力实现相邻路口协同；奖励也为路口的压力负值；网络使用FRAP使得方案更普适。**这个就是被反复提及的MPLight算法** | 多路口如何协同和如何扩展到过千的路口规模。 |
