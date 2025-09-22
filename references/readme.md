@@ -18,8 +18,9 @@
 还有一些论文是其他方面的改进：
 
 1. 消除Sim2Real的鸿沟
-2. 可解释性：【28】通过训练一个多项式来拟合DQN里的DNN，实现可解释和可调节；Pi-Light使用自定义的编程语言加强可解释性
-3. 提升模型性能： 
+2. 数据缺失：DiffLight使用扩散模型补齐数据并同步做Offline RL训练
+3. 可解释性：【28】通过训练一个多项式来拟合DQN里的DNN，实现可解释和可调节；Pi-Light使用自定义的编程语言加强可解释性
+4. 提升模型性能： 
    1. ExpressMightBeEnough通过改进状态表示提升性能；
    2. IntelliLight通过引入PhaseGate和Memory Palace提升；
    3. PressLight把Pressure机制引入到RL的state和reward设计中
@@ -50,7 +51,7 @@
 | 6    | AAAI   | 2020 | **MetaLight: Value-Based Meta-Reinforcement Learning for Traffic Signal Control** | 231  | 创新的修改FRAP和元学习算法，提高了新路口agent的训练效率，让模型可以在不同路口上的迁移 | 大规模交通网络下训练效率问题               |
 | 7    | ICAPS  | 2020 | Online Traffic Signal Control through Sample-Based Constrained Optimization | 6    |                                                              |                                            |
 | 8    | ICAPS  | 2020 | Guidelines for Action Space Definition in Reinforcement Learning-Based Traffic Signal Control Systems | ?    |                                                              |                                            |
-| 9    | NeurPS | 2024 | DiffLight: A Partial Rewards Conditioned Diffusion Model for Traffic Signal Control with Missing Data | 8    |                                                              |                                            |
+| 9    | NeurPS | 2024 | DiffLight: A Partial Rewards Conditioned Diffusion Model for Traffic Signal Control with Missing Data | 8    | 使用Diffusion模型对离线RL中残缺的轨迹数据（观测/奖励）进行修补，同时训练agent。比较复杂。 | 修补缺失的轨迹数据                         |
 | 10   | NeurPS | 2020 | **AttendLight: Universal Attention-Based Reinforcement Learning Model for Traffic Signal Control.** | 127  | 使用天生支持变长的加性注意力机制来适配多路口不同拓扑不同相位。先使用注意力机制提取各车道的特征，根据phase2lane相关性得到各相位的特征；然后再次使用注意力机制处理各相位的特征，得到各相位的打分，softmax选择动作 | 多路口场景下解决方案的通用性/泛化能力      |
 | 11   | ICML   | 2022 | **Expression might be enough: representing pressure and demand for reinforcement learning based traffic signal control** | 72   | 对既有的三个方法（MPLight/CoLight/MP）的输入状态做增强，即将pressure与“有效通行车辆数”构成状态表示，取得了更好的性能 | 通过改进状态表示提升模型性能               |
 | 12   | IJCAI  | 2024 | X-Light: Cross-City Traffic Signal Control Using Transformer on Transformer as Meta Multi-Agent Reinforcement Learner. | 16   |                                                              |                                            |
