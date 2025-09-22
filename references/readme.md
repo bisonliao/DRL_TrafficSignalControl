@@ -17,8 +17,8 @@
 
 还有一些论文是其他方面的改进：
 
-1. 消除Sim2Real的鸿沟
-2. 数据缺失：DiffLight使用扩散模型补齐数据并同步做Offline RL训练
+1. 消除Sim2Real的鸿沟，例如【1】和【25】，【25】是纯视觉输入的、且唯一没有与Baseline PK性能的一篇论文
+2. 数据缺失：DiffLight使用扩散模型补齐数据并同步做Offline RL训练;【15】则是监督训练状态插补模型和奖励插补模型
 3. 可解释性：【28】通过训练一个多项式来拟合DQN里的DNN，实现可解释和可调节；Pi-Light使用自定义的编程语言加强可解释性
 4. 提升模型性能： 
    1. ExpressMightBeEnough通过改进状态表示提升性能；
@@ -34,6 +34,7 @@
 5. 工程效率的课题：大规模交通网络下，交通灯巨多，怎么更高效的组织数据，避免一个一个交通灯手工写代码做特征工程；怎么大量的收集实际数据？与地图app结合？
 6. 与地图app/地图有什么可以结合的？用来采集模拟数据？ 更多的训练用特征（例如碧海片区是睡城/粤海街道是工作区）？
 7. 交叉一下：例如用进化算法来学习出一个可解释的多项式，已经有论文使用MCTS来优化一段出简单的程序了
+8. 基于纯视觉输入（照片/视频）的RL agent？
 
 
 
@@ -43,7 +44,7 @@
 
 | ID   | venue  | year | title                                                        | cite | 一句话描述                                                   | 侧重的问题                                 |
 | ---- | ------ | ---- | ------------------------------------------------------------ | ---- | ------------------------------------------------------------ | ------------------------------------------ |
-| 1    | AAAI   | 2024 | Prompt to Transfer: Sim-to-Real Transfer for Traffic Signal Control with Prompt Learning | 47   | 利用LLM引入知识向量输入到GAT旁路中，补充特征输入，更好的解决Sim2Real的鸿沟问题。我认为GAT作用有限，因为模拟器底层可能不支持。 | Sim2Real                                   |
+| 1    | AAAI   | 2024 | Prompt to Transfer: Sim-to-Real Transfer for Traffic Signal Control with Prompt Learning | 47   | 利用LLM引入知识向量输入到GAT旁路中，补充特征输入，更好的解决Sim2Real的鸿沟问题。我认为GAT作用有限，因为模拟器底层可能不支持。 | Sim2Rea GAPl                               |
 | 2    | AAAI   | 2024 | π-Light: Programmatic Interpretable Reinforcement Learning for Resource-Limited Traffic Signal Control | 17   | 定义一种由条件语句/赋值语句构成的程序来描述策略，使用MCTS找到最优的程序。解决了三个挑战：可解释性、泛化能力、低性能硬件下可部署 | 可解释性，泛化能力，低硬件开销             |
 | 3    | AAAI   | 2023 | SafeLight: A Reinforcement Learning Method toward Collision-free Traffic Signal Control | 54   | 作者希望训练RL不做出导致危险的动作，但实际上只需要不到100行代码加上三条人工规则即可。是一篇回字有几种写法的论文，而且论文里引用的事故数据也归因错误，事故出现在交叉路口不表示是信号灯导致的。所以我不认同这个论文。 | 安全问题                                   |
 | 4    | AAAI   | 2021 | Hierarchically and Cooperatively Learning Traffic Signal Control | 89   | 使用HRL解决目标不一致和协同问题。HRL总是很复杂不好复现。     | 多路口协同                                 |
@@ -57,7 +58,7 @@
 | 12   | IJCAI  | 2024 | X-Light: Cross-City Traffic Signal Control Using Transformer on Transformer as Meta Multi-Agent Reinforcement Learner. | 16   |                                                              |                                            |
 | 13   | IJCAI  | 2023 | DenseLight: Efficient Control for Large-scale Traffic Signals with Dense Feedback | 17   |                                                              |                                            |
 | 14   | IJCAI  | 2023 | GPLight: Grouped Multi-agent Reinforcement Learning for Large-scale Traffic Signal Control | 40   | 大规模交通网络下agent如何训练的问题：GCN对每个路口进行Embedding； Group Cohesion根据路口的embedding向量做聚类 ，同一类的路口只训练一个agent；并使用QMIX网络进行多个Agent间的协同，达到全局最优（QMIX是优化最终的全局损失函数的方案） | 多路口训练效率和协同。                     |
-| 15   | IJCAI  | 2023 | Reinforcement Learning Approaches for Traffic Signal Control under Missing Data | 22   |                                                              |                                            |
+| 15   | IJCAI  | 2023 | Reinforcement Learning Approaches for Traffic Signal Control under Missing Data | 22   | 利用可用的观测数据监督训练插补模型，对缺失的状态和奖励做修复，然后训练RL agent | 修补缺失的轨迹数据                         |
 | 16   | IJCAI  | 2023 | InitLight: Initial Model Generation for Traffic Signal Control Using Adversarial Inverse Reinforcement Learning | 11   |                                                              |                                            |
 | 16   | IJCAI  | 2022 | Multi-Agent Reinforcement Learning for Traffic Signal Control through Universal Communication Method | 42   | 抽象出一种通用的相邻路口协同机制UniComm：使用自注意力提取相邻路口间的影响信息，并基于此实现了多路口的UniLight方法。UniComm机制也可以应用到其他TSC方法中 | 多路口协同                                 |
 | 18   | IJCAI  | 2022 | TinyLight: Adaptive Traffic Signal Control on Devices with Extremely Limited Resources. | 10   |                                                              |                                            |
@@ -67,7 +68,7 @@
 | 22   | AAMAS  | 2024 | DuaLight: Enhancing Traffic Signal Control by Leveraging Scenario-Specific and Scenario-Shared Knowledge | 15   |                                                              |                                            |
 | 23   | AAMAS  | 2024 | MATLight: Traffic Signal Coordinated Control Algorithm based on Heterogeneous-Agent Mirror Learning with Transformer | 5    |                                                              |                                            |
 | 24   | AAMAS  | 2023 | SocialLight: Distributed Cooperation Learning towards Network-Wide Traffic Signal Control | 19   |                                                              |                                            |
-| 25   | AAMAS  | 2022 | Fully-Autonomous, Vision-based Traffic Signal Control: From Simulation to Reality | 16   |                                                              |                                            |
+| 25   | AAMAS  | 2022 | Fully-Autonomous, Vision-based Traffic Signal Control: From Simulation to Reality | 16   | 直接输入摄像头画面的端到端训练，不需要人工设计特征输入；通过领域随机化，让模拟器下训练的agent具备泛化能力应对实际部署中的不同拓扑/天气/光照带来的挑战。唯一一个没有与baseline PK的论文 | SIm2Real GAP、纯视觉输入                   |
 | 26   | AAMAS  | 2022 | Reinforcement Learning for Traffic Signal Control Optimization: A Concept for Real-World Implementation | 3    |                                                              |                                            |
 | 27   | AAMAS  | 2022 | Multi-agent Traffic Signal Control via Distributed RL with Spatial and Temporal Feature Extraction | 19   |                                                              |                                            |
 | 28   | AAMAS  | 2020 | **Learning an Interpretable Traffic Signal Control Policy**  | 82   | 在DQN训练的同时，训练一个多项式函数来拟合Q网络。因为多项式函数具备可解释可调节的属性 | 可解释性可调节性                           |
