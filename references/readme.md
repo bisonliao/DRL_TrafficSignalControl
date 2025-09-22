@@ -13,14 +13,13 @@
    2. 更好的网络架构：FRAP，它对翻转和旋转的状态不变，对不同拓扑的路口通用，只需要较少的训练数据；MPLight也使用FRAP，并结合了Pressure机制
    3. 聚类成比较少的场景：GPLight，它使用GCN提取每个路口的嵌入向量并聚类，对这些类别的agent使用QMIX网络优化整体目标
 
-
-
 还有一些论文是其他方面的改进：
 
 1. 消除Sim2Real的鸿沟，例如【1】和【25】，【25】是纯视觉输入的、且唯一没有与Baseline PK性能的一篇论文
 2. 数据缺失：DiffLight使用扩散模型补齐数据并同步做Offline RL训练;【15】则是监督训练状态插补模型和奖励插补模型
 3. 可解释性：【28】通过训练一个多项式来拟合DQN里的DNN，实现可解释和可调节；Pi-Light使用自定义的编程语言加强可解释性
-4. 提升模型性能： 
+4. 低配置硬件的适配：Pi-Light 和 TinyLight
+5. 提升模型性能： 
    1. ExpressMightBeEnough通过改进状态表示提升性能；
    2. IntelliLight通过引入PhaseGate和Memory Palace提升；
    3. PressLight把Pressure机制引入到RL的state和reward设计中
@@ -61,7 +60,7 @@
 | 15   | IJCAI  | 2023 | Reinforcement Learning Approaches for Traffic Signal Control under Missing Data | 22   | 利用可用的观测数据监督训练插补模型，对缺失的状态和奖励做修复，然后训练RL agent | 修补缺失的轨迹数据                         |
 | 16   | IJCAI  | 2023 | InitLight: Initial Model Generation for Traffic Signal Control Using Adversarial Inverse Reinforcement Learning | 11   |                                                              |                                            |
 | 16   | IJCAI  | 2022 | Multi-Agent Reinforcement Learning for Traffic Signal Control through Universal Communication Method | 42   | 抽象出一种通用的相邻路口协同机制UniComm：使用自注意力提取相邻路口间的影响信息，并基于此实现了多路口的UniLight方法。UniComm机制也可以应用到其他TSC方法中 | 多路口协同                                 |
-| 18   | IJCAI  | 2022 | TinyLight: Adaptive Traffic Signal Control on Devices with Extremely Limited Resources. | 10   |                                                              |                                            |
+| 18   | IJCAI  | 2022 | TinyLight: Adaptive Traffic Signal Control on Devices with Extremely Limited Resources. | 10   | 构建一个多层x多头MLP网络来覆盖各种轻量子网，利用熵最小化目标在训练中自动将无关边权推向零，生成极简子图，从而适配廉价硬件。有点类似网络架构搜索（NAS） | 低硬件开销                                 |
 | 19   | IJCAI  | 2021 | Dynamic Lane Traffic Signal Control with Group Attention and Multi-Timescale Reinforcement Learning | 19   |                                                              |                                            |
 | 20   | AAMAS  | 2025 | MacLight: Multi-scene Aggregation Convolutional Learning for Traffic Signal Control. | ?    |                                                              |                                            |
 | 21   | AAMAS  | 2025 | FGLight: Learning Neighbor-level Information for Traffic Signal Control | ?    |                                                              |                                            |
@@ -74,8 +73,8 @@
 | 28   | AAMAS  | 2020 | **Learning an Interpretable Traffic Signal Control Policy**  | 82   | 在DQN训练的同时，训练一个多项式函数来拟合Q网络。因为多项式函数具备可解释可调节的属性 | 可解释性可调节性                           |
 | 29   | AAMAS  | 2020 | Feudal Multi-Agent Deep Reinforcement Learning for Traffic Signal Control | 99   | 把类似HRL的FuN和Multi-agent Advantage Actor-Critic）方法结合起来：把整个交通网络分割成多个区域，每个区域一个Manager 和 多个Worker，每个worker管理一个信号灯。 | 多路口协同                                 |
 |      |        |      |                                                              |      |                                                              |                                            |
-| 30   |        | 2013 | Self-Organizing_Traffic_Lights_A_Realistic_Simulate（SOTL）  | 387  | 简单传统方法：当红灯相位累计的等待车辆达到阈值，就切换。常用作BaseLIne | BaseLine                                   |
-| 31   |        | 2013 | Max pressure control of a network of signalized intersections（MP） | 692  | 通过实时比对各方向的“压力”来决定哪个相位（phase）放行，压力的计算可以简单理解为上游车辆数减去下游车辆数。 | BaseLine                                   |
+| 30   |        | 2013 | Self-Organizing_Traffic_Lights_A_Realistic_Simulate（SOTL）  | 387  | 简单传统方法：当红灯相位累计的等待车辆达到阈值，就切换。     | BaseLine                                   |
+| 31   |        | 2013 | Max pressure control of a network of signalized intersections（MP） | 692  | 传统方法：通过实时比对各方向的“压力”来决定哪个相位（phase）放行，压力的计算可以简单理解为上游车辆数减去下游车辆数。 | BaseLine                                   |
 | 32   | CIKM   | 2019 | **Learning Phase Competition for Traffic Signal Control（FRAP）** | 292  | 针对TSC问题的巨大状态空间且探索不足 以及每个路口都要训练的问题，巧妙的设计了FRAP网络，它对翻转和旋转的状态不变，对不同拓扑的路口通用。 | 解决探索不足性能不好的问题                 |
 | 33   | CIKM   | 2019 | **CoLight: Learning Network-level Cooperation for Traffic Signal Control** | 480  | 使用图注意力机制，协同相邻的信号灯。类似NLP中的自注意力，把路口i和它的多个邻居路口j的嵌入向量输入到transformer解码器中，再输入DQN来预测动作。一个交通网络里面数百个路口一起训练一个agent，但分开部署为一个agent负责一个路口。 | 多路口的协同和批量训练                     |
 | 34   | KDD    | 2018 | IntelliLight：a Reinforcement Learning Approach for Intelligent Traffic Signal Control | 764  | 引入了 Phase Gate 和 Memory Palace 两个机制，分别解决了（相对动作：切/不切）“相位敏感性不足”和“样本不均衡”问题。 | 通过改进RL方法提升性能                     |
