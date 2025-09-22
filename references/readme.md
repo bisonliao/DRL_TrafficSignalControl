@@ -75,7 +75,7 @@
 | 29   | AAMAS  | 2020 | Feudal Multi-Agent Deep Reinforcement Learning for Traffic Signal Control | 99   | 把类似HRL的FuN和Multi-agent Advantage Actor-Critic）方法结合起来：把整个交通网络分割成多个区域，每个区域一个Manager 和 多个Worker，每个worker管理一个信号灯。 | 多路口协同                                 |
 |      |        |      |                                                              |      |                                                              |                                            |
 | 30   |        | 2013 | Self-Organizing_Traffic_Lights_A_Realistic_Simulate（SOTL）  | 387  | 简单传统方法：当红灯相位累计的等待车辆达到阈值，就切换。常用作BaseLIne | BaseLine                                   |
-| 31   |        | 2013 | Max pressure control of a network of signalized intersections（MP） | 692  | 看似简单，实则有点麻烦，我居然没有看懂细节，需要二刷         | BaseLine                                   |
+| 31   |        | 2013 | Max pressure control of a network of signalized intersections（MP） | 692  | 通过实时比对各方向的“压力”来决定哪个相位（phase）放行，压力的计算可以简单理解为上游车辆数减去下游车辆数。 | BaseLine                                   |
 | 32   | CIKM   | 2019 | **Learning Phase Competition for Traffic Signal Control（FRAP）** | 292  | 针对TSC问题的巨大状态空间且探索不足 以及每个路口都要训练的问题，巧妙的设计了FRAP网络，它对翻转和旋转的状态不变，对不同拓扑的路口通用。 | 解决探索不足性能不好的问题                 |
 | 33   | CIKM   | 2019 | **CoLight: Learning Network-level Cooperation for Traffic Signal Control** | 480  | 使用图注意力机制，协同相邻的信号灯。类似NLP中的自注意力，把路口i和它的多个邻居路口j的嵌入向量输入到transformer解码器中，再输入DQN来预测动作。一个交通网络里面数百个路口一起训练一个agent，但分开部署为一个agent负责一个路口。 | 多路口的协同和批量训练                     |
 | 34   | KDD    | 2018 | IntelliLight：a Reinforcement Learning Approach for Intelligent Traffic Signal Control | 764  | 引入了 Phase Gate 和 Memory Palace 两个机制，分别解决了（相对动作：切/不切）“相位敏感性不足”和“样本不均衡”问题。 | 通过改进RL方法提升性能                     |
