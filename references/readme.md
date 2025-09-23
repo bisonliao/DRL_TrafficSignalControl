@@ -34,6 +34,7 @@
 6. 与地图app/地图有什么可以结合的？用来采集模拟数据？ 更多的训练用特征（例如碧海片区是睡城/粤海街道是工作区）？
 7. 交叉一下：例如用进化算法来学习出一个可解释的多项式，已经有论文使用MCTS来优化一段出简单的程序了
 8. 基于纯视觉输入（照片/视频）的RL agent？
+9. 我看几乎所有的论文都是固定 5s 10s 15s，其实1s才是最优解，但对agent要求更高。这可能也是一个创意
 
 
 
@@ -54,7 +55,7 @@
 | 9    | NeurPS | 2024 | DiffLight: A Partial Rewards Conditioned Diffusion Model for Traffic Signal Control with Missing Data | 8    | 使用Diffusion模型对离线RL中残缺的轨迹数据（观测/奖励）进行修补，同时训练agent。比较复杂。 | 修补缺失的轨迹数据                         |
 | 10   | NeurPS | 2020 | **AttendLight: Universal Attention-Based Reinforcement Learning Model for Traffic Signal Control.** | 127  | 使用天生支持变长的加性注意力机制来适配多路口不同拓扑不同相位。先使用注意力机制提取各车道的特征，根据phase2lane相关性得到各相位的特征；然后再次使用注意力机制处理各相位的特征，得到各相位的打分，softmax选择动作 | 多路口场景下解决方案的通用性/泛化能力      |
 | 11   | ICML   | 2022 | **Expression might be enough: representing pressure and demand for reinforcement learning based traffic signal control** | 72   | 对既有的三个方法（MPLight/CoLight/MP）的输入状态做增强，即将pressure与“有效通行车辆数”构成状态表示，取得了更好的性能 | 通过改进状态表示提升模型性能               |
-| 12   | IJCAI  | 2024 | X-Light: Cross-City Traffic Signal Control Using Transformer on Transformer as Meta Multi-Agent Reinforcement Learner. | 16   |                                                              |                                            |
+| 12   | IJCAI  | 2024 | X-Light: Cross-City Traffic Signal Control Using Transformer on Transformer as Meta Multi-Agent Reinforcement Learner. | 16   | 一种基于 两层Transformer 的跨城多智能体交通信号控制框架，低层用于增强路口间协作，高层用于提升跨场景泛化与迁移能力。（太复杂了我估计搞不定） | 跨城市的多智能体泛化与迁移能力             |
 | 13   | IJCAI  | 2023 | DenseLight: Efficient Control for Large-scale Traffic Signals with Dense Feedback | 17   |                                                              |                                            |
 | 14   | IJCAI  | 2023 | GPLight: Grouped Multi-agent Reinforcement Learning for Large-scale Traffic Signal Control | 40   | 大规模交通网络下agent如何训练的问题：GCN对每个路口进行Embedding； Group Cohesion根据路口的embedding向量做聚类 ，同一类的路口只训练一个agent；并使用QMIX网络进行多个Agent间的协同，达到全局最优（QMIX是优化最终的全局损失函数的方案） | 多路口训练效率和协同。                     |
 | 15   | IJCAI  | 2023 | Reinforcement Learning Approaches for Traffic Signal Control under Missing Data | 22   | 利用可用的观测数据监督训练插补模型，对缺失的状态和奖励做修复，然后训练RL agent | 修补缺失的轨迹数据                         |
