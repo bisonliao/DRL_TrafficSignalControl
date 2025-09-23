@@ -8,6 +8,7 @@
    1. 有HRL、FuN，利用更上层的策略网络来协同
    2. 有使用Pressure来协同路口的，例如PressLight / MPLight / ExpressMightBeEnough。Pressure考虑了下游的车辆数，是相邻路口之间的重要关系
    3. 注意力机制，例如 AttendLight / UniComm / CoLight，注意力机制天然有路口间相互影响力学习能力。
+   4. 使用（两层）Transformer，例如 X-Light，分别用来提取跨路口影响力和学习跨城市跨场景的泛化能力
 2. 如何高效训练 / 支持更大规模 / 抽象统一方案
    1. Meta Learning：MetaLight，除了迁移学习，它也使用了FRAP来适配不同拓扑的路口；Pi-Light有很好的可解释性和泛化能力
    2. 更好的网络架构：FRAP，它对翻转和旋转的状态不变，对不同拓扑的路口通用，只需要较少的训练数据；MPLight也使用FRAP，并结合了Pressure机制
@@ -65,7 +66,7 @@
 | 19   | IJCAI  | 2021 | Dynamic Lane Traffic Signal Control with Group Attention and Multi-Timescale Reinforcement Learning | 19   |                                                              |                                            |
 | 20   | AAMAS  | 2025 | MacLight: Multi-scene Aggregation Convolutional Learning for Traffic Signal Control. | ?    |                                                              |                                            |
 | 21   | AAMAS  | 2025 | FGLight: Learning Neighbor-level Information for Traffic Signal Control | ?    |                                                              |                                            |
-| 22   | AAMAS  | 2024 | DuaLight: Enhancing Traffic Signal Control by Leveraging Scenario-Specific and Scenario-Shared Knowledge | 15   |                                                              |                                            |
+| 22   | AAMAS  | 2024 | DuaLight: Enhancing Traffic Signal Control by Leveraging Scenario-Specific and Scenario-Shared Knowledge | 15   | 每个场景（异构的交通网络）独立的一组神经网络参数，表征学习到的scenario-specific的知识 ；同时他们又共享MLP/GAT这些基础设施，表征学习到的scenario- shared 知识。兼顾跨场景知识迁移 + 场景特定优化两个目标 | 跨场景知识迁移                             |
 | 23   | AAMAS  | 2024 | MATLight: Traffic Signal Coordinated Control Algorithm based on Heterogeneous-Agent Mirror Learning with Transformer | 5    |                                                              |                                            |
 | 24   | AAMAS  | 2023 | SocialLight: Distributed Cooperation Learning towards Network-Wide Traffic Signal Control | 19   |                                                              |                                            |
 | 25   | AAMAS  | 2022 | Fully-Autonomous, Vision-based Traffic Signal Control: From Simulation to Reality | 16   | 直接输入摄像头画面的端到端训练，不需要人工设计特征输入；通过领域随机化，让模拟器下训练的agent具备泛化能力应对实际部署中的不同拓扑/天气/光照带来的挑战。唯一一个没有与baseline PK的论文 | SIm2Real GAP、纯视觉输入                   |

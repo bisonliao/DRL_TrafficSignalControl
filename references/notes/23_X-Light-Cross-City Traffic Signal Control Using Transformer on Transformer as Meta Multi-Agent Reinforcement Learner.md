@@ -41,6 +41,8 @@ Meta RL-based methods are gaining attention in TSC since they can greatly reduce
 
 ![image-20250923153819100](img/image-20250923153819100.png)
 
+![image-20250923185511650](img/image-20250923185511650.png)
+
 #### 3.3 高层Transformer
 
 ![image-20250923153010983](img/image-20250923153010983.png)
@@ -69,6 +71,10 @@ Meta RL-based methods are gaining attention in TSC since they can greatly reduce
 2. 结合多场景共训练（multi-scenario co-training）与残差连接（将目标路口原始观测添加到最终表示），在零样本迁移与常规模型训练两种设置下均取得显著性能提升与训练稳定性。
 3. 实验验证：在多种仿真场景上 X‑Light 在零-shot 转移与非转移设置中均优于多种基线方法，展示出更好的传输性和协作效果。
 
-### 我的疑问
+### 6、代码公开
+
+[代码在这里](https://github.com/jianghaoyuan1994/X-Light)
+
+### 7、我的疑问
 
 训练的时候是两层Transformer和各个城市的路口的数据输入，那训练完后部署到一个路口，还是两层Transformer吗？
