@@ -1,0 +1,6 @@
+class Config:
+    PHASE_NUM=4
+    CELL_LEN=5
+    OBSERV_CELL_NUM=6
+    MAX_QLEN=32
+    MAX_PHASE_DUR=30
