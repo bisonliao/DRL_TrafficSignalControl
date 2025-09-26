@@ -5,6 +5,7 @@ class Config:
     # geometry / problem
     PHASE_NUM = 4        # 4 相位：0 NS-through, 1 EW-through, 2 NS-left, 3 EW-left
     MOVEMENT_NUM = 8     # movements: N_through, N_left, E_through, E_left, S_through, S_left, W_through, W_left
+    FEAT_DIM = 1         # the length of movement's feature
 
     # mapping phase -> movement indices (based on above movement order)
     # phase 0 (NS-through) uses movements 0 (N_through) and 4 (S_through)
@@ -27,6 +28,7 @@ class Config:
         [1, 5],
         [3, 7],
     ]
+    
 
     # model dims
     MOVEMENT_HIDDEN = 32   # hidden size for per-movement encoders
@@ -36,20 +38,20 @@ class Config:
     K_LAYERS = 2           # number of 1x1 conv / linear layers applied to pair volumes
 
     # training / DQN
-    GAMMA = 0.9
-    LR = 1e-3
+    GAMMA = 0.98
+    LR = 1e-4
     BATCH_SIZE = 128
-    BUFFER_SIZE = int(1e5)
+    BUFFER_SIZE = int(1e6)
     MIN_REPLAY_SIZE = 2000
-    TARGET_UPDATE_FREQ = 1000    # steps
+    TARGET_UPDATE_FREQ = 2000    # steps
     TRAIN_FREQ = 1               # how often to do a gradient step (in env steps)
     EPS_START = 1.0
     EPS_END = 0.01
-    EPS_DECAY = 50000            # linear decay over steps
+    EPS_DECAY_RATE = 0.98
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # other runtime
-    SEED = 42
+    SEED = 31
     PRINT_EVERY = 1
 
     CELL_LEN=5

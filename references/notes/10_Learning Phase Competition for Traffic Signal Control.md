@@ -24,7 +24,7 @@ FRAP就是(which is invariant to symmetric operations like **F**lip and **R**ota
 
 FRAP训练的收敛速度比其他RL方法快，而且有很好的通用性，可以处理不同路口结构、不同的车流分布、复杂的相位设置、多交叉口环境。
 
-#### 2、Related Work
+### 2、Related Work
 
 介绍了TSC问题中的传统方法和基于RL的方法，作者认为他们都不能很好的处理8相位的单个路口的场景，因为探索不够。
 
@@ -114,6 +114,8 @@ return Q_values
 
 设 n = 32， 复杂度就是 2 ^ 12，相比一开始的2 ^ 43，复杂度降低了非常多。关键是让探索更充分了。
 
+![image-20250925141653026](img/image-20250925141653026.png)
+
 ### 5、Experiments
 
 #### 5.1 实验设计
@@ -147,4 +149,12 @@ return Q_values
 
 ### 7、开放代码
 
-没有找到
+[这里](https://github.com/gjzheng93/frap-pub)，但是看不懂，是基于keras的（搜索keras才找到似乎是网络结构定义的部分）
+
+[这里](https://github.com/dxing-cs/TinyLight/tree/master/TinyLight)也有作为baseline实现的一份FRAP
+
+### 8、我的代码
+
+1. D/E立方体不要拼接自己和自己的关系
+2. 损失函数通过 开4次方降低幅度，-20的处罚也相应的改小
+

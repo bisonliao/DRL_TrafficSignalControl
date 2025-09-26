@@ -55,7 +55,7 @@ class TscEnv(gym.Env):
         self.current_phase = 1
 
         self.current_step = 0
-        self.phase_duration = 0 # 一个相位持续多久
+        self.phase_duration = 1 # 一个相位持续多久
         self.vehicles_ever_seen.clear()
         if len(self.durations) > 0:
             self.writer.add_scalar('phase_duration/max', np.max(self.durations), self.total_step)
@@ -150,6 +150,73 @@ class TscEnv(gym.Env):
 
 
     def calc_vehicle_info(self):
+
+        dic_lane_vehicles = self.eng.get_lane_vehicles()
+        vehicles_present = set()
+
+        self.vehicle_dense = np.zeros(Config.PHASE_NUM, dtype=np.float32) #停止线前面30m范围内的车辆密度
+        self.avg_speed = np.zeros(Config.PHASE_NUM, dtype=np.float32)#停止线前面30m范围内的车辆平均速度
+        self.waiting_qlen = np.zeros(Config.PHASE_NUM, dtype=np.float32) # 入口车道上排队的车辆数目，由于每个方向都是一个入口车道，所以这里就是等待队列的长度
+
+
+        speed_list = [deque(maxlen=100) for _ in range(Config.PHASE_NUM)]
+        in_roads = {'road_2_1_2', 'road_0_1_0', 'road_1_2_3', 'road_1_0_1'}
+        out_roads = {'road_1_1_2', 'road_1_1_0', 'road_1_1_3', 'road_1_1_1'}
+        for lane_id in dic_lane_vehicles:
+            road_id = lane_id[:-2]
+
+            if road_id not in in_roads and road_id not in out_roads:
+                continue
+
+            vehicle_ids = dic_lane_vehicles[lane_id]
+
+            for vid in vehicle_ids:
+                try:
+                    info = self.eng.get_vehicle_info(vid)
+                    if info.get('running', "0") != "1": #whether the vehicle is running
+                        continue
+
+                    #  The next intersection if the vehicle is running on a lane
+                    '''if info.get('intersection', "")!= 'intersection_1_1':
+                        continue'''
+
+                    self.vehicles_ever_seen.add(vid)
+
+                    if road_id not in in_roads: #不在入口车道里
+                        continue
+
+                    ##-------- 这一步往后，都是在intersection_1_1的入口车道上 ----#
+                    vehicles_present.add(vid)
+                    
+
+                    speed = info['speed']       
+                    route = info['route'] # A string contains ids of following roads in the vehicle’s route which are separated by space
+                    phase_id = self._route2phaseID(route)
+
+                    if float(speed) < 0.1:
+                        self.waiting_qlen[phase_id] += 1
+
+                    drivable = info['drivable']
+                    vehicle_distance = info["distance"]  # 已行驶距离
+                    to_stop_line = Config.LANE_LEN - float(vehicle_distance)
+                    if to_stop_line > (Config.CELL_LEN *Config.OBSERV_CELL_NUM) or to_stop_line < 0:
+                        continue
+
+                    
+                    self.vehicle_dense[phase_id] += 1.0 / (Config.OBSERV_CELL_NUM * 2) 
+                    speed_list[phase_id].append( float(speed) )
+
+                except Exception as e:
+                    print(f"Error retrieving info for vehicle {vid}: {e}")
+            
+        for i in range(Config.PHASE_NUM):
+            if len(speed_list[i]) > 0:
+                self.avg_speed[i] = sum(speed_list[i]) / len(speed_list[i])
+
+        self.throughput = len(self.vehicles_ever_seen - vehicles_present) #从回合开始（reset后）到目前，通过该路口的车辆数，即吞吐量
+
+
+    def calc_vehicle_info2(self):
         
         vehicles_present = set()
 
